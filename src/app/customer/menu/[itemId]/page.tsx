@@ -11,8 +11,6 @@ import {
   PiBellRingingBold,
   PiHeartBold,
   PiMinusBold,
-  PiPauseBold,
-  PiPlayBold,
   PiPlusBold,
   PiShoppingBagBold,
   PiStarFourFill,
@@ -29,49 +27,11 @@ export default function MenuItemDetailsPage() {
   );
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoContainerRef = useRef<HTMLDivElement>(null);
-  const overlayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [quantity, setQuantity] = useState(1);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [showPlaybackOverlay, setShowPlaybackOverlay] = useState(true);
 
   const updateQuantity = (change: number) => {
     setQuantity((current) => Math.max(1, current + change));
   };
-
-  const clearOverlayTimer = () => {
-    if (overlayTimeoutRef.current) {
-      clearTimeout(overlayTimeoutRef.current);
-      overlayTimeoutRef.current = null;
-    }
-  };
-
-  const showOverlayTemporarily = () => {
-    clearOverlayTimer();
-    setShowPlaybackOverlay(true);
-    overlayTimeoutRef.current = setTimeout(() => {
-      setShowPlaybackOverlay(false);
-      overlayTimeoutRef.current = null;
-    }, 900);
-  };
-
-  const toggleVideoPlayback = () => {
-    const video = videoRef.current;
-
-    if (!video) {
-      return;
-    }
-
-    if (video.paused) {
-      void video.play();
-      return;
-    }
-
-    video.pause();
-  };
-
-  useEffect(() => {
-    return clearOverlayTimer;
-  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -299,44 +259,12 @@ export default function MenuItemDetailsPage() {
                 ref={videoRef}
                 className="h-full w-full object-cover"
                 controls
-                onEnded={() => {
-                  clearOverlayTimer();
-                  setIsPlaying(false);
-                  setShowPlaybackOverlay(true);
-                }}
-                onPause={() => {
-                  clearOverlayTimer();
-                  setIsPlaying(false);
-                  setShowPlaybackOverlay(true);
-                }}
-                onPlay={() => {
-                  setIsPlaying(true);
-                  showOverlayTemporarily();
-                }}
                 playsInline
                 preload="metadata"
                 src={menuItemDetail.video.src}
               >
                 Your browser does not support the video tag.
               </video>
-              <button
-                className={`absolute left-1/2 top-1/2 z-10 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary text-on-primary shadow-2xl transition-all duration-300 active:scale-90 ${
-                  !showPlaybackOverlay
-                    ? "pointer-events-none scale-90 opacity-0"
-                    : "scale-100 opacity-100"
-                }`}
-                onClick={toggleVideoPlayback}
-                type="button"
-              >
-                <span className="sr-only">
-                  {isPlaying ? "Pause video" : "Play video"}
-                </span>
-                {isPlaying ? (
-                  <PiPauseBold aria-hidden className="h-10 w-10" />
-                ) : (
-                  <PiPlayBold aria-hidden className="h-10 w-10" />
-                )}
-              </button>
             </div>
           </motion.section>
         </div>
