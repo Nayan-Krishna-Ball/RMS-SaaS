@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   PiBellBold,
@@ -22,6 +23,7 @@ import {
 } from "@/app/data";
 
 export default function CustomerMenuPage() {
+  const router = useRouter();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [selectedSpiceLevel, setSelectedSpiceLevel] = useState(spiceLevels[0]);
@@ -34,6 +36,10 @@ export default function CustomerMenuPage() {
 
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen((current) => !current);
+  };
+
+  const openItemDetails = (slug: string) => {
+    router.push(`/customer/menu/${slug}`);
   };
 
   return (
@@ -94,7 +100,18 @@ export default function CustomerMenuPage() {
           >
             {recommendations.map((item) => (
               <SwiperSlide className="w-72!" key={item.title}>
-                <div className="rounded-xl overflow-hidden glass-card border border-outline-variant/20 group relative">
+                <div
+                  className="rounded-xl overflow-hidden glass-card border border-outline-variant/20 group relative cursor-pointer"
+                  onClick={() => openItemDetails(item.slug)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      openItemDetails(item.slug);
+                    }
+                  }}
+                >
                   <div className="h-48 relative overflow-hidden">
                     <Image
                       alt={item.alt}
@@ -124,7 +141,10 @@ export default function CustomerMenuPage() {
                     </div>
                     <button
                       className="bg-primary text-on-primary h-10 w-10 rounded-lg flex items-center justify-center active:scale-90 transition-transform"
-                      onClick={toggleBottomSheet}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        toggleBottomSheet();
+                      }}
                       type="button"
                     >
                       <PiPlusBold aria-hidden className="h-5 w-5" />
@@ -177,8 +197,17 @@ export default function CustomerMenuPage() {
         >
           {filteredMenuItems.map((item) => (
               <div
-                className="glass-card border border-outline-variant/20 rounded-xl p-4 flex gap-4 transition-all duration-300 active:scale-[0.99] hover:border-primary/30 hover:bg-surface-container/80"
+                className="glass-card border border-outline-variant/20 rounded-xl p-4 flex gap-4 transition-all duration-300 active:scale-[0.99] hover:border-primary/30 hover:bg-surface-container/80 cursor-pointer"
                 key={`${item.category}-${item.title}`}
+                onClick={() => openItemDetails(item.slug)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    openItemDetails(item.slug);
+                  }
+                }}
               >
                 <div className="relative w-24 h-24 rounded-lg overflow-hidden shrink-0">
                   <Image
@@ -205,7 +234,10 @@ export default function CustomerMenuPage() {
                     </span>
                     <button
                       className="text-primary border border-primary/30 px-3 py-1 rounded-lg text-xs font-bold active:scale-95 transition-transform flex items-center gap-1.5"
-                      onClick={toggleBottomSheet}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        toggleBottomSheet();
+                      }}
                       type="button"
                     >
                       <PiPlusBold aria-hidden className="h-3.5 w-3.5" />
