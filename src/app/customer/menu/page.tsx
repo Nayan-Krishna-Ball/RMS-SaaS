@@ -246,7 +246,7 @@ export default function CustomerMenuPage() {
         initial={false}
         transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="bg-surface-container-high rounded-t-3xl border-t border-outline-variant/30 p-margin-mobile pb-10 shadow-2xl">
+        <div className="bg-surface-container-high rounded-t-3xl border-t border-outline-variant/30 p-margin-mobile shadow-2xl">
           <div className="w-12 h-1.5 bg-outline-variant/40 rounded-full mx-auto mb-6" />
           <header className="flex justify-between items-start mb-6">
             <div>
