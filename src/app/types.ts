@@ -8,7 +8,8 @@ export interface FoodItem {
   ingredients: string[];
   price: number;
   discountPrice?: number;
-  quantity: number; // default stock or initial purchase quantity
+  quantity: number;
+ // default stock or initial purchase quantity
   category: string;
 }
 
