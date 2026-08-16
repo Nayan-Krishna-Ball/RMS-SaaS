@@ -9,7 +9,7 @@ export interface FoodItem {
   price: number;
   discountPrice?: number;
   quantity: number;
- // default stock or initial purchase quantity
+ // default stock or initial purchase quantity 
   category: string;
 }
 
